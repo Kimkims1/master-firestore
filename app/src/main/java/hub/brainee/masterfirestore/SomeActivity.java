@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -33,9 +34,11 @@ public class SomeActivity extends AppCompatActivity {
     private EditText title, description;
     private FirebaseFirestore firestore;
 
-    private Button btnSave, btnLoad,btnUpdateDesc,btnDelDesc,btnDelNote;
+    private Button btnSave, btnLoad, btnUpdateDesc, btnDelDesc, btnDelNote;
 
     private TextView titleTxt, descTxt;
+
+    private CollectionReference collectionReference = firestore.collection("Notebook");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,31 +51,32 @@ public class SomeActivity extends AppCompatActivity {
         btnLoad = findViewById(R.id.loadBtn);
         titleTxt = findViewById(R.id.txtTitle);
         descTxt = findViewById(R.id.txtDesc);
-        btnUpdateDesc = findViewById(R.id.btnUpdateDesc);
+
+        /*btnUpdateDesc = findViewById(R.id.btnUpdateDesc);
         
         btnDelDesc = findViewById(R.id.btnDelDesc);
-        btnDelNote = findViewById(R.id.btnDelNote);
+        btnDelNote = findViewById(R.id.btnDelNote);*/
 
         firestore = FirebaseFirestore.getInstance();
-        
+
         btnDelNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                delNote();
+                //delNote();
             }
         });
-        
+
         btnDelDesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                delDescription();
+               // delDescription();
             }
         });
 
         btnUpdateDesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateDesc();
+               // updateDesc();
             }
         });
 
@@ -91,7 +95,7 @@ public class SomeActivity extends AppCompatActivity {
         });
     }
 
-    private void delNote() {
+   /* private void delNote() {
         firestore.collection("Notebook").document("My First Note")
                 .delete();
     }
@@ -105,8 +109,8 @@ public class SomeActivity extends AppCompatActivity {
 
         String upDesc = description.getText().toString().trim();
         firestore.collection("Notebook").document("My First Note")
-                .update(KEY_DESCRIPTION,upDesc);
-    }
+                .update(KEY_DESCRIPTION, upDesc);
+    }*/
 
     @Override
     protected void onStart() {
@@ -121,12 +125,14 @@ public class SomeActivity extends AppCompatActivity {
 
                         if (value.exists()) {
 
-                            String titleText = value.getString(KEY_TITLE);
-                            String descText = value.getString(KEY_DESCRIPTION);
+                            Note note = value.toObject(Note.class);
+
+                            String titleText = note.getTitle();
+                            String descText = note.getDescription();
 
                             titleTxt.setText("Title: " + titleText);
                             descTxt.setText("Description: " + descText);
-                        }else {
+                        } else {
                             titleTxt.setText("");
                             descTxt.setText("");
                         }
@@ -147,10 +153,10 @@ public class SomeActivity extends AppCompatActivity {
                            /* String titleText = snapshot.getString(KEY_TITLE);
                             String descText = snapshot.getString(KEY_DESCRIPTION);
 */
-                           Note note = snapshot.toObject(Note.class);
+                            Note note = snapshot.toObject(Note.class);
 
-                           String titleText = note.getTitle();
-                           String descText = note.getDescription();
+                            String titleText = note.getTitle();
+                            String descText = note.getDescription();
 
                             titleTxt.setText("Title: " + titleText);
                             descTxt.setText("Description: " + descText);
@@ -172,14 +178,20 @@ public class SomeActivity extends AppCompatActivity {
         String titleEt = title.getText().toString().trim();
         String descEt = description.getText().toString().trim();
 
+        /*Note class in place*/
+        Note note = new Note(titleEt, descEt);
+
+        /* Saving multiple data collection*/
+        collectionReference.add(note);
+
         /*Map<String, Object> note = new HashMap<>();
         note.put(KEY_TITLE, titleEt);
         note.put(KEY_DESCRIPTION, descEt);*/
 
-        /*Note class in place*/
-        Note note = new Note(titleEt,descEt);
 
-        firestore.collection("Notebook").document("My First Note")
+
+        /* Saving/Adding Single data collection*/
+        /*firestore.collection("Notebook").document("My First Note")
                 .set(note)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -194,7 +206,9 @@ public class SomeActivity extends AppCompatActivity {
 
                         Toast.makeText(SomeActivity.this, "Error: " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
-                });
+                });*/
+
+
 
     }
 }
