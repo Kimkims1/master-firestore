@@ -33,7 +33,7 @@ public class SomeActivity extends AppCompatActivity {
     private static final String KEY_TITLE = "title";
     private static final String KEY_DESCRIPTION = "description";
 
-    private EditText title, description;
+    private EditText title, description,eTxtpriority;
     private FirebaseFirestore firestore;
 
     private Button btnSave, btnLoad, btnUpdateDesc, btnDelDesc, btnDelNote;
@@ -52,6 +52,8 @@ public class SomeActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSave);
         btnLoad = findViewById(R.id.loadBtn);
         titleTxt = findViewById(R.id.txtData);
+
+        eTxtpriority = findViewById(R.id.priority);
         // descTxt = findViewById(R.id.txtDesc);
 
         /*btnUpdateDesc = findViewById(R.id.btnUpdateDesc);
@@ -232,6 +234,12 @@ public class SomeActivity extends AppCompatActivity {
     private void saveData() {
         String titleEt = title.getText().toString().trim();
         String descEt = description.getText().toString().trim();
+
+        if (eTxtpriority.length() == 0 ){
+            eTxtpriority.setText("0");
+        }
+
+        int priority = Integer.parseInt(eTxtpriority.getText().toString().trim());
 
         /*Note class in place*/
         Note note = new Note(titleEt, descEt);
