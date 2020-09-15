@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "332319727491",
+    "firebase_url": "https://masterfirestore-be096.firebaseio.com",
+    "project_id": "masterfirestore-be096",
+    "storage_bucket": "masterfirestore-be096.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:332319727491:android:4cb147fd29c8be18daa0b6",
+        "android_client_info": {
+          "package_name": "hub.brainee.masterfirestore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "332319727491-08pmmsgvdj54dtr8uml0qtg3rbqkejnt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoMzt_tbMlkpvCWBDn9eOdQiMnE8bgjx0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "332319727491-08pmmsgvdj54dtr8uml0qtg3rbqkejnt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
