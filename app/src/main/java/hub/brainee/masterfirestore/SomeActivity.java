@@ -21,6 +21,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -140,8 +141,10 @@ public class SomeActivity extends AppCompatActivity {
                     String title = note.getTitle();
                     String description = note.getDescription();
 
-                    data += "ID: " + documentId + "\nTitle: " + title + "\n" + "Description: " + description + "\n";
+                    int priority = note.getPriority();
 
+                    data += "ID: " + documentId + "\nTitle: " + title + "\n" + "Description: " + description + "\n" +
+                            "Priority: " + priority + "\n\n\n";
 
                 }
 
@@ -176,6 +179,8 @@ public class SomeActivity extends AppCompatActivity {
 
     private void loadData() {
         collectionReference
+                .whereGreaterThanOrEqualTo("priority",2)
+                .orderBy("priority", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
