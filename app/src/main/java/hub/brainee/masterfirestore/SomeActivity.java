@@ -144,8 +144,13 @@ public class SomeActivity extends AppCompatActivity {
 
                         if (snapshot.exists()) {
 
-                            String titleText = snapshot.getString(KEY_TITLE);
+                           /* String titleText = snapshot.getString(KEY_TITLE);
                             String descText = snapshot.getString(KEY_DESCRIPTION);
+*/
+                           Note note = snapshot.toObject(Note.class);
+
+                           String titleText = note.getTitle();
+                           String descText = note.getDescription();
 
                             titleTxt.setText("Title: " + titleText);
                             descTxt.setText("Description: " + descText);
@@ -167,9 +172,12 @@ public class SomeActivity extends AppCompatActivity {
         String titleEt = title.getText().toString().trim();
         String descEt = description.getText().toString().trim();
 
-        Map<String, Object> note = new HashMap<>();
+        /*Map<String, Object> note = new HashMap<>();
         note.put(KEY_TITLE, titleEt);
-        note.put(KEY_DESCRIPTION, descEt);
+        note.put(KEY_DESCRIPTION, descEt);*/
+
+        /*Note class in place*/
+        Note note = new Note(titleEt,descEt);
 
         firestore.collection("Notebook").document("My First Note")
                 .set(note)
