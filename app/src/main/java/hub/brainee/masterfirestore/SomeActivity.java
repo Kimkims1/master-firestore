@@ -123,7 +123,7 @@ public class SomeActivity extends AppCompatActivity {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
 
-                if (error != null){
+                if (error != null) {
                     return;
                 }
 
@@ -132,11 +132,14 @@ public class SomeActivity extends AppCompatActivity {
                 for (QueryDocumentSnapshot snapshot : value) {
 
                     Note note = snapshot.toObject(Note.class);
+                    note.setDocumentId(snapshot.getId());
 
+                    String documentId = note.getDocumentId();
                     String title = note.getTitle();
                     String description = note.getDescription();
 
-                    data += "Title: " + title + "\n" + "Description: " + description + "\n";
+                    data += "ID: " + documentId + "\nTitle: " + title + "\n" + "Description: " + description + "\n";
+
 
                 }
 
@@ -181,11 +184,13 @@ public class SomeActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
 
                             Note note = snapshot.toObject(Note.class);
+                            note.setDocumentId(snapshot.getId());
 
+                            String documentId = note.getDocumentId();
                             String title = note.getTitle();
                             String description = note.getDescription();
 
-                            data += "Title: " + title + "\n" + "Description: " + description + "\n";
+                            data += "ID: " + documentId + "\nTitle: " + title + "\n" + "Description: " + description + "\n";
 
                         }
 
