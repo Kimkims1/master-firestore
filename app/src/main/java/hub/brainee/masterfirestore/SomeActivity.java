@@ -62,7 +62,7 @@ public class SomeActivity extends AppCompatActivity {
         firestore = FirebaseFirestore.getInstance();
         collectionReference = firestore.collection("Notebook");
 
-        btnDelNote.setOnClickListener(new View.OnClickListener() {
+       /* btnDelNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //delNote();
@@ -82,7 +82,7 @@ public class SomeActivity extends AppCompatActivity {
                 // updateDesc();
             }
         });
-
+*/
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,6 +118,31 @@ public class SomeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        collectionReference.addSnapshotListener(this, new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+
+                if (error != null){
+                    return;
+                }
+
+                String data = "";
+
+                for (QueryDocumentSnapshot snapshot : value) {
+
+                    Note note = snapshot.toObject(Note.class);
+
+                    String title = note.getTitle();
+                    String description = note.getDescription();
+
+                    data += "Title: " + title + "\n" + "Description: " + description + "\n";
+
+                }
+
+                titleTxt.setText(data);
+            }
+        });
        /* firestore.collection("Notebook").document("My First Note")
                 .addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
                     @Override
