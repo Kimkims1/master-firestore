@@ -21,6 +21,8 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +40,7 @@ public class SomeActivity extends AppCompatActivity {
 
     private TextView titleTxt, descTxt;
 
-    private CollectionReference collectionReference = firestore.collection("Notebook");
+    private CollectionReference collectionReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +51,8 @@ public class SomeActivity extends AppCompatActivity {
         description = findViewById(R.id.desc);
         btnSave = findViewById(R.id.btnSave);
         btnLoad = findViewById(R.id.loadBtn);
-        titleTxt = findViewById(R.id.txtTitle);
-        descTxt = findViewById(R.id.txtDesc);
+        titleTxt = findViewById(R.id.txtData);
+        // descTxt = findViewById(R.id.txtDesc);
 
         /*btnUpdateDesc = findViewById(R.id.btnUpdateDesc);
         
@@ -58,6 +60,7 @@ public class SomeActivity extends AppCompatActivity {
         btnDelNote = findViewById(R.id.btnDelNote);*/
 
         firestore = FirebaseFirestore.getInstance();
+        collectionReference = firestore.collection("Notebook");
 
         btnDelNote.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,14 +72,14 @@ public class SomeActivity extends AppCompatActivity {
         btnDelDesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // delDescription();
+                // delDescription();
             }
         });
 
         btnUpdateDesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // updateDesc();
+                // updateDesc();
             }
         });
 
@@ -115,7 +118,7 @@ public class SomeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        firestore.collection("Notebook").document("My First Note")
+       /* firestore.collection("Notebook").document("My First Note")
                 .addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -137,12 +140,34 @@ public class SomeActivity extends AppCompatActivity {
                             descTxt.setText("");
                         }
                     }
-                });
+                });*/
     }
 
 
     private void loadData() {
-        firestore.collection("Notebook").document("My First Note")
+        collectionReference
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                        String data = "";
+
+                        for (QueryDocumentSnapshot snapshot : queryDocumentSnapshots) {
+
+                            Note note = snapshot.toObject(Note.class);
+
+                            String title = note.getTitle();
+                            String description = note.getDescription();
+
+                            data += "Title: " + title + "\n" + "Description: " + description + "\n";
+
+                        }
+
+                        titleTxt.setText(data);
+                    }
+                });
+       /* firestore.collection("Notebook").document("My First Note")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
@@ -150,9 +175,9 @@ public class SomeActivity extends AppCompatActivity {
 
                         if (snapshot.exists()) {
 
-                           /* String titleText = snapshot.getString(KEY_TITLE);
+                           *//* String titleText = snapshot.getString(KEY_TITLE);
                             String descText = snapshot.getString(KEY_DESCRIPTION);
-*/
+*//*
                             Note note = snapshot.toObject(Note.class);
 
                             String titleText = note.getTitle();
@@ -171,7 +196,7 @@ public class SomeActivity extends AppCompatActivity {
 
                         Toast.makeText(SomeActivity.this, "Error: " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
-                });
+                });*/
     }
 
     private void saveData() {
@@ -207,7 +232,6 @@ public class SomeActivity extends AppCompatActivity {
                         Toast.makeText(SomeActivity.this, "Error: " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });*/
-
 
 
     }
